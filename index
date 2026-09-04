@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Reset Password - Portal Absensi</title>
+    <!-- Supabase JS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #31105C; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        h2 { color: #1F2937; margin-bottom: 20px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #D1D5DB; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #4F46E5; color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        button:hover { background: #4338CA; }
+        #message { margin-top: 15px; font-size: 14px; text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Buat Password Baru</h2>
+    <input type="password" id="newPassword" placeholder="Masukkan password baru">
+    <button onclick="updatePassword()">Simpan Password</button>
+    <div id="message"></div>
+</div>
+
+<script>
+    // Inisialisasi Supabase JS
+    const supabaseUrl = 'https://xucsakkdyysswnsmacyb.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh1Y3Nha2tkeXlzc3duc21hY3liIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1MzUxNzgsImV4cCI6MjEwNDExMTE3OH0.PZ5XFp_rwDkSBVT5Oe9a2LbVGOtRhzDiMTPR32xnnIw'; // Masukkan anon key project Anda
+    const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+    async function updatePassword() {
+        const password = document.getElementById('newPassword').value;
+        const msg = document.getElementById('message');
+
+        if (!password) {
+            msg.style.color = 'red';
+            msg.innerText = 'Password tidak boleh kosong!';
+            return;
+        }
+
+        const { data, error } = await _supabase.auth.updateUser({ password: password });
+
+        if (error) {
+            msg.style.color = 'red';
+            msg.innerText = 'Gagal: ' + error.message;
+        } else {
+            msg.style.color = 'green';
+            msg.innerText = 'Password berhasil diubah! Anda sekarang bisa login via aplikasi Android.';
+        }
+    }
+</script>
+
+</body>
+</html>
